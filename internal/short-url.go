@@ -61,3 +61,15 @@ func (s *ShortenUrl) GetOriginalUrl(short string) (*string, error) {
 
 	return &data.Url, nil
 }
+
+func (s *ShortenUrl) GetAllUrls() ([]ShortUrl, error) {
+	var data []ShortUrl
+
+	result := s.Database.Find(&data)
+
+	if result.Error != nil {
+		return nil, fmt.Errorf("Error getting the urls")
+	}
+
+	return data, nil
+}

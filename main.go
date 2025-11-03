@@ -14,6 +14,11 @@ type PageData struct {
 	Url string
 }
 
+type IndexData struct {
+	Data  []shortenurl.ShortUrl
+	Error bool
+}
+
 type Data struct {
 	Url string `json:"url"`
 }
@@ -49,14 +54,16 @@ func main() {
 	router.Handle("/web/styles/", http.StripPrefix("/web/styles/", fs))
 
 	router.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
-		tmpl.ExecuteTemplate(w, "index.html", nil)
+		data, err := s.GetAllUrls()
+		tmpl.ExecuteTemplate(w, "index.html", IndexData{
+			Data:  data,
+			Error: err != nil,
+		})
 	})
 
 	router.HandleFunc("GET /{code}", func(w http.ResponseWriter, r *http.Request) {
 		code := r.PathValue("code")
 		url, err := s.GetOriginalUrl(code)
-
-		fmt.Println(err)
 
 		if err != nil {
 

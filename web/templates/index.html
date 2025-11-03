@@ -27,5 +27,21 @@
       </div>
     </div>
 
+    {{if .Error}}
+      <p style="color: red;">Error loading URLs</p>
+    {{else}}
+      {{if .Data}}
+        <ul>
+          {{range .Data}}
+            <li>
+              Short: <a href="/{{.Short}}" target="_blank">localhost:8080/{{.Short}}</a>
+            </li>
+          {{end}}
+        </ul>
+      {{else}}
+        <p>No URLs found</p>
+      {{end}}
+    {{end}}
+
   </body>
 </html>
